@@ -9,16 +9,20 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import Sidebar from "../Sidebar";
 import MessageContainer from "./MessageContainer";
+import { User } from "@/db/dummy";
+import {useSelectedUser} from "@/store/useSelectedUser";
 
 interface ChatLayoutprops {
   defaultLayout: number[] | undefined;
+  users:User[];
 }
 
 // when first time user visits the chat page the default dimensions are 320px and 480px
 
-function ChatLayout({ defaultLayout = [320, 480] }: ChatLayoutprops) {
+function ChatLayout({ defaultLayout = [320, 480] ,users}: ChatLayoutprops) {
   const [isMobile, setisMobile] = useState(false);
   const [isCollapsed, setisCollapsed] = useState(false);
+  const {selectedUser} = useSelectedUser();
 
   useEffect(() => {
     const checkScreenwidth = () => {
@@ -61,11 +65,11 @@ function ChatLayout({ defaultLayout = [320, 480] }: ChatLayoutprops) {
           isCollapsed && "min-w-[80px] transition-all duration-300 ease-in-out"
         )}
       >
-        <Sidebar isCollapsed={isCollapsed} />
+        <Sidebar isCollapsed={isCollapsed} users={users} />
       </ResizablePanel>
       <ResizableHandle withHandle />
       <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
-        { /* <div className="flex justify-center items-center h-full w-full px-10">
+        {!selectedUser && <div className="flex justify-center items-center h-full w-full px-10">
             <div className="flex flex-col justify-center items-center gap-4">
               <img
                 src="/logo.png"
@@ -76,8 +80,8 @@ function ChatLayout({ defaultLayout = [320, 480] }: ChatLayoutprops) {
                 Click on a chat to view the messages
               </p>
             </div>
-          </div>*/}
-          <MessageContainer/>
+          </div>}
+          {selectedUser && <MessageContainer/>}
       </ResizablePanel>
     </ResizablePanelGroup>
   );

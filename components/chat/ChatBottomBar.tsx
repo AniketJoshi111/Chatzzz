@@ -26,9 +26,7 @@ function ChatBottomBar() {
 		const randomIndex = Math.floor(Math.random() * playSoundFunctions.length);
 		soundEnabled && playSoundFunctions[randomIndex]();
 	};
-
-
-
+  
   return (
     <div className="p-2 flex justify-between w-full items-center gap-2">
       {!message.trim() && (
