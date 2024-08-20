@@ -1,11 +1,34 @@
+"use client"
+import { checkAuthStatus } from '@/actions/auth.actions'
+import { useQuery } from '@tanstack/react-query'
+import { Loader } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
-const page = () => {
+const Page = () => {
+
+  const router = useRouter();
+  const {data} = useQuery({
+    queryKey:["authCheck"],
+    queryFn:async () => await checkAuthStatus(),
+
+  });
+  console.log(data);
+  if(data?.success) router.push('/');
+ 
+
   return (
-    <div>
-      Auth Callback page
+    <div className='mt-20 w-full flex justify-center'>
+      <div className='flex flex-col items-center gap-2'>
+        <Loader className='w-10 h-10 animate-spin text-muted-foreground '/>
+        <h3 className='text-xl font-bold'>
+          Redirecting ...
+        </h3>
+        <p className=''>Please Wait</p>
+      </div>
+       
     </div>
   )
 }
 
-export default page
+export default Page
